@@ -51,6 +51,16 @@ public class EmployeeDAO
 	});
 	}
 	
+	
+	public void employeeRegistration(Employee employee)
+	{
+		String sql="INSERT INTO EMPLOYEE_RECORDS(NAME,EMAILID,PASSWORD) VALUES(?,?,?)";
+		Object[] params={employee.getName(),employee.getEmailId(),employee.getPassword()};
+		int rows=jdbcTemplate.update(sql,params);
+		System.out.println("Number of rows updated" +rows);
+		
+	}
+	
 	public List<Employee> findAll() {
 		String sql = "SELECT ID,DEPARTMENT_ID,ROLE_ID,NAME,EMAILID,ACTIVE FROM EMPLOYEE_RECORDS";
 		return jdbcTemplate.query(sql, (rs, rowNo) -> convert(rs));
@@ -64,7 +74,7 @@ public class EmployeeDAO
 
 	}
 	
-	public Employee findEmployeeId(Integer roleId,Integer departmentId)
+	public Employee findEmployeeId(int roleId,int departmentId)
 	{
 		String sql="SELECT ID FROM EMPLOYEE_RECORDS WHERE ROLE_ID=? AND DEPARTMENT_ID=? AND ACTIVE=1";
 		Object[] params={roleId,departmentId};
@@ -80,12 +90,12 @@ public class EmployeeDAO
 		try
 		{
 			
-		String sql="SELECT ID FROM EMPLOYEE_RECORDS WHERE EMAILID=? AND PASSWORD=? AND ACTIVE=1" ;
+		String sql="SELECT DEPARTMENT_ID FROM EMPLOYEE_RECORDS WHERE EMAILID=? AND PASSWORD=? AND ACTIVE=1" ;
 		Object[] params={emailId,password};
 		return jdbcTemplate.queryForObject(sql,params, (rs, rowNum)->
 		{
 			Employee employee=new Employee();
-			employee.setId(rs.getInt("ID"));
+			employee.setId(rs.getInt("DEPARTMENT_ID"));
 			return employee;
 		});
 		}

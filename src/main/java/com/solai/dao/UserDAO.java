@@ -75,6 +75,19 @@ public class UserDAO
 		return user;
 		});
 	}
+	
+	
+	public User findname(String emailId)
+	{
+		String sql="SELECT NAME FROM USER_RECORDS WHERE EMAILID=?";
+		Object[] params={emailId};
+		return jdbcTemplate.queryForObject(sql, params,(rs,rowNum)->{
+			User user=new User();
+			user.setName(rs.getString("NAME"));
+			return user;
+	});
+}
+	
 
 		public User findOne(String emailId,String password) throws PersistenceException
 	{
@@ -119,6 +132,9 @@ private User convert(ResultSet rs) throws SQLException
 	user.setActive(rs.getBoolean("ACTIVE"));
 	return user;
 }
+
+
+
 
 
 public List<User> list()

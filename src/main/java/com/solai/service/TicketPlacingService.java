@@ -1,9 +1,12 @@
 package com.solai.service;
 
+import java.util.List;
+
 import com.solai.dao.CreatingTicketDAO;
 import com.solai.exception.PersistenceException;
 import com.solai.exception.ServiceException;
 import com.solai.exception.ValidatorException;
+import com.solai.model.Issue;
 import com.solai.model.User;
 import com.solai.validator.TicketPlacingValidator;
 
@@ -54,46 +57,60 @@ public class TicketPlacingService
 
 		}
 	}
-	public void creatingTicket(String emailId, String password, String subject, String description, String departmentName,
+	
+	
+	public void employeeLogin(String emailId,String password) throws ServiceException 
+	{
+		try
+		{
+			ticketPlacingValidator.employeeLogin(emailId,password);
+			creatingTicketDAO.employeeLogin(emailId, password);
+		}
+		catch(ValidatorException|PersistenceException e)
+		{
+			throw new ServiceException("Employee Login is denied",e);
+		}
+	}
+	public void creatingTicket(String emailId, String password, String subject, String description, String name,
 			String priority) throws ServiceException {
 
 		try {
-			ticketPlacingValidator.creatingTicket(emailId, password, subject, description, departmentName,priority);
-			creatingTicketDAO.creatingTicket(emailId, password, subject, description, departmentName,priority);
+			ticketPlacingValidator.creatingTicket(emailId, password, subject, description, name,priority);
+			creatingTicketDAO.creatingTicket(emailId, password, subject, description, name,priority);
 		} catch (ValidatorException | PersistenceException e) {
 			throw new ServiceException("Can't able to Create Ticket", e);
 
 		}
 	}
 
-	public void updatingTicket(String name,String emailId, String password, int issueId, String updateDescription)
+	public void updatingTicket(String emailId, String password, int issueId, String updateDescription)
 			throws ServiceException {
 
 		try {
-			ticketPlacingValidator.updatingTicket(name,emailId, password, issueId, updateDescription);
-			creatingTicketDAO.updatingTicket(name,emailId, password, issueId, updateDescription);
+			ticketPlacingValidator.updatingTicket(emailId, password, issueId, updateDescription);
+			creatingTicketDAO.updatingTicket(emailId, password, issueId, updateDescription);
 		} catch (ValidatorException | PersistenceException e) {
 			throw new ServiceException("Cannot Update Ticket", e);
 
 		}
 	}
 
-	public void updateTicketClose(String name,String emailId, String password, int issueId) throws ServiceException {
+	public void updateTicketClose(String emailId, String password, int issueId) throws ServiceException {
 
 		try {
-			ticketPlacingValidator.updateTicketClose(name,emailId, password, issueId);
-			creatingTicketDAO.updateTicketClose(name,emailId, password, issueId);
+			ticketPlacingValidator.updateTicketClose(emailId, password, issueId);
+			creatingTicketDAO.updateTicketClose(emailId, password, issueId);
 		} catch (ValidatorException | PersistenceException e) {
 			throw new ServiceException("Cannot Close Ticket", e);
 
 		}
 	}
 
-	public void findUserRecords(String emailId, String password) throws ServiceException {
+	public List<Issue> findUserRecords(String emailId, String password) throws ServiceException {
 
 		try {
 			ticketPlacingValidator.findUserRecords(emailId, password);
-			creatingTicketDAO.findUserRecords(emailId, password);
+			return creatingTicketDAO.findUserRecords(emailId, password);
 		} catch (ValidatorException | PersistenceException e) {
 			throw new ServiceException("Cannot View Ticket", e);
 
@@ -134,11 +151,11 @@ public class TicketPlacingService
 		
 	}
 
-	public void findEmployeeTickets(String emailId, String password) throws ServiceException{
+	public List<Issue> findEmployeeTickets(String emailId, String password) throws ServiceException{
 		
 		try {
 			ticketPlacingValidator.findEmployeeTickets(emailId,password);
-			creatingTicketDAO.findEmployeeTickets(emailId,password);
+			return creatingTicketDAO.findEmployeeTickets(emailId,password);
 		} catch (ValidatorException | PersistenceException e) {
 			throw new ServiceException("Cannot View Tickets", e);
 

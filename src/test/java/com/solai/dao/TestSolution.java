@@ -28,7 +28,7 @@ public class TestSolution {
 //		solutionDAO.delete(3);
 //		System.out.println(solutionDAO.findAll());
 //		System.out.println(solutionDAO.findOne(4));
-//		System.out.println(solutionDAO.findEmployeeId(1));
+	System.out.println(solutionDAO.findEmployeeId(1));
 		
 	}
 

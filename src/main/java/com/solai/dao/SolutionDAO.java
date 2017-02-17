@@ -44,6 +44,7 @@ public void update(Solution solution) {
 
 	}
 	
+	
 public void delete(int issueId) {
 	String sql = "DELETE FROM SOLUTION_RECORDS WHERE S_ISSUE_ID=?";
 	Object params = issueId;

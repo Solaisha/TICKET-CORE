@@ -48,8 +48,8 @@ JdbcTemplate jdbcTemplate=ConnectionUtil.getJdbcTemplate();
 	}
 	
 	public void updateStatus(Issue issue) {
-		String sql = "UPDATE ISSUE_RECORDS SET STATUS='IN PROGRESS' AND EMPLOYEE_NAME=? WHERE ID=?";
-		Object[] params = {issue.getEmployeeName(), issue.getId() };
+		String sql = "UPDATE ISSUE_RECORDS SET STATUS='IN PROGRESS' WHERE ID=?";
+		Object[] params = {issue.getId() };
 		int rows = jdbcTemplate.update(sql, params);
 		System.out.println(rows);
 
@@ -158,17 +158,17 @@ public List <Issue> list(int userId)
 
 }
 
-public List<Issue> findEmployeeTickets(int empId) {
-	String sql = "SELECT ISSUE_RECORDS.ID,SUBJECT,DESCRIPTION,STATUS,PRIORITY FROM ISSUE_RECORDS,SOLUTION_RECORDS WHERE ISSUE_RECORDS.ID = SOLUTION_RECORDS.S_ISSUE_ID  AND SOLUTION_RECORDS.S_EMPLOYEE_ID = ?";
-	Object[] params = { empId };
+public List<Issue> findEmployeeTickets(int DEPTId) {
+	String sql = "SELECT DESCRIPTION FROM ISSUE_RECORDS WHERE I_DEPARTMENT_ID=?";
+	Object[] params = { DEPTId };
 	return jdbcTemplate.query(sql, params, (rs, rowNo) -> {
 		Issue issue = new Issue();
 
-		issue.setId(rs.getInt("ID"));
-		issue.setSubject(rs.getString("SUBJECT"));
+//		issue.setId(rs.getInt("ID"));
+//		issue.setSubject(rs.getString("SUBJECT"));
 		issue.setDescription(rs.getString("DESCRIPTION"));
-		issue.setStatus(rs.getString("STATUS"));
-		issue.setPriority(rs.getString("PRIORITY"));
+//		issue.setStatus(rs.getString("STATUS"));
+//		issue.setPriority(rs.getString("PRIORITY"));
 
 		return issue;
 

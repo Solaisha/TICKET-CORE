@@ -13,14 +13,5 @@ public class UserLoginDAO {
 
 	}
 	
-	
-	public boolean employeeLogin(String emailId,String password) throws PersistenceException  
-	{
-			employeeDAO.findOne(emailId,password).getId();
-
-						return true;
-	
-	
-}
 
 }

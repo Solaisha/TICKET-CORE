@@ -14,38 +14,39 @@ public class TestTicketService {
 		TicketPlacingService tps = new TicketPlacingService();
 		User user = new User();
 user.setId(1);
-		user.setName("RAI");
-		user.setPassword("rai*");
-		user.setEmailId("RAI@GMAIL.COM");
-		String subject = "money";
-		String description = "no stipend";
-		String departmentName = "HR";
+		user.setName("RITHI");
+		user.setPassword("rithi*");
+		user.setEmailId("RITHI@GMAIL.COM");
+		String subject = "LAN";
+		String description = "Connection problem";
+		String name = "IT";
 		String priority = "HIGH";
-//		System.out.println(user.getEmailId());
+////		System.out.println(user.getEmailId());
+////		
+//		Employee employee=new Employee();
+//		employee.setId(2);
+//		int employeeId=employee.getId();
+//		employee.setEmailId("SHAM@GMAIL.COM");
+//		employee.setPassword("sham*");
 //		
-		Employee employee=new Employee();
-		employee.setId(5);
-		int employeeId=employee.getId();
-		employee.setEmailId("MAYA@GMAIL.COM");
-		employee.setPassword("maya**");
-		
-		Issue issue=new Issue();
-		issue.setId(9);
-		int issueId=issue.getId();
-		String updateDescription="Allowance will be planned to give";
-		String ticketSolution="LAN is provided";
-		
+//		Issue issue=new Issue();
+//		issue.setId(29);
+//		int issueId=issue.getId();
+//		String updateDescription="Connection is not good";
+//		String ticketSolution="LAN is provided";
+//		
 		
 //		tps.userRegistration(user.getName(), user.getEmailId(), user.getPassword());
 //		tps.userLogin(user.getEmailId(), user.getPassword());
-		System.out.println(tps.findOne(user));
-		//		tps.creatingTicket(user.getEmailId(), user.getPassword(), subject, description,
-//				departmentName, priority);
-//		tps.updatingTicket(user.getName(), user.getEmailId(), user.getPassword(), issueId, updateDescription);
+//		tps.employeeLogin(employee.getEmailId(), employee.getPassword());
+//		System.out.println(tps.findOne(user));
+		tps.creatingTicket(user.getEmailId(), user.getPassword(), subject, description,
+				name, priority);
+//		tps.updatingTicket(user.getEmailId(), user.getPassword(), issueId, updateDescription);
 		
 //		tps.updateTicketClose(user.getName(), user.getEmailId(), user.getPassword(), issueId);
-		//tps.findUserRecords(user.getEmailId(), user.getPassword());
-//		tps.assigningEmployee(employee.getEmailId(), employee.getPassword(), issueId, employeeId);
+//		tps.findUserRecords(user.getEmailId(), user.getPassword());
+//		tps.assigningEmployee(employee.getEmailId(), employee.getPassword(), 15, 2);
 //		tps.ticketSolution(employee.getEmailId(), employee.getPassword(), issueId, ticketSolution);
 //		tps.findEmployeeTickets(employee.getEmailId(), employee.getPassword());
 //		tps.deleteTickets(employee.getEmailId(), employee.getPassword(), issueId);

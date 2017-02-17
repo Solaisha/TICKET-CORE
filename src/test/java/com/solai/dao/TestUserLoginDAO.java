@@ -9,8 +9,7 @@ public class TestUserLoginDAO {
 		UserLoginDAO userLoginDAO=new UserLoginDAO();
 //		System.out.println(userLoginDAO.userLogin("SARA@GMAIL.COM","sara"));
 		
-		EmployeeDAO employeeDAO=new EmployeeDAO();
-		System.out.println(userLoginDAO.employeeLogin("SHAM@gmail.COM","sham*"));
+		
 	}
 
 }

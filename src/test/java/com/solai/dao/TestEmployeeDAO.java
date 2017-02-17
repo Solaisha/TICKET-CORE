@@ -13,24 +13,26 @@ public class TestEmployeeDAO {
 	{
 		Employee employee =new Employee();
 //		employee.setId(3);
-//		employee.setName("jAYA");
-//		employee.setPassword("jaya**");
+		employee.setName("MALAR");
+		employee.setPassword("malar*");
+		employee.setEmailId("MALAR@GMAIL.COM");
+
 //		employee.setActive(true);
 //		
 //		Role role=new Role();
 //		role.setId(1);														/*1.ADMIN,2.AUTHOR,3.USER*/
 //		employee.setRole(role);
 //		
-//		employee.setEmailId("JAYA@GMAIL.COM");
 //		
 //		Department department =new Department();
 //		department.setId(2);													/*1.IT,2.HR*/
 //		employee.setEmployee(department);
 //		
 		EmployeeDAO employeeDAO=new EmployeeDAO();
-//		employeeDAO.save(employee);
+		employeeDAO.save(employee);
 //		employeeDAO.update(employee);
 //		employeeDAO.delete(3);
+//		employeeDAO.employeeRegistration(employee);
 //		System.out.println(employeeDAO.findAll());
 //		System.out.println(employeeDAO.findOne(2));
 //		System.out.println(employeeDAO.findEmployeeId(1, 2));
@@ -38,7 +40,7 @@ public class TestEmployeeDAO {
 //		System.out.println(employeeDAO.findDepartmentId("SHAM@GMAIL.COM", "sham*"));
 //		System.out.println(employeeDAO.findRoleId("SHAM@GMAIL.COM", "sham*"));
 //		System.out.println(employeeDAO.findEmployeeDepartmentId("SHAM@GMAIL.COM", "sham*"));
-		System.out.println(employeeDAO.findEmployeeeName(2,"SHAM@GMAIL.COM"));
+//		System.out.println(employeeDAO.findEmployeeeName(2,"SHAM@GMAIL.COM"));
 
 		
 	

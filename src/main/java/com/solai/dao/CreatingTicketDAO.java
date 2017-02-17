@@ -34,9 +34,11 @@ public class CreatingTicketDAO
 	
 	Employee employee = new Employee();
 	EmployeeDAO employeeDAO = new EmployeeDAO();
+	EmployeeLoginDAO employeeLoginDAO=new EmployeeLoginDAO();
 	
 	Role role=new Role();
 	RoleDAO roleDAO=new RoleDAO();
+
 
 	
 										/*UserLogin*/
@@ -57,6 +59,28 @@ public class CreatingTicketDAO
 		userloginDAO.userLogin(emailId, password);
 	}
 	
+										/*EmployeeLogin*/
+
+	
+	public void employeeRegistration(String name,String emailId,String password) throws PersistenceException
+	{
+		employee.setName(name);
+		employee.setEmailId(emailId);
+		employee.setPassword(password);
+		employee.setRole(role);
+//		employee.setEmployee();
+		employeeDAO.save(employee);
+	}
+	
+	public void employeeLogin(String emailId,String password) throws PersistenceException
+	{
+		employee.setEmailId(emailId);
+		employee.setPassword(password);
+		employeeLoginDAO.employeeLogin(emailId, password);
+	}
+	
+	
+	
 	
 	public Object findOne(int id)
 	{
@@ -67,7 +91,7 @@ public class CreatingTicketDAO
 		
 
 										/*Ticket Creation*/
-	public void creatingTicket(String emailId, String password, String subject, String description,String departmentName,String priority) throws PersistenceException {
+	public void creatingTicket(String emailId, String password, String subject, String description,String name,String priority) throws PersistenceException {
 		
 		
 		try {
@@ -83,24 +107,12 @@ public class CreatingTicketDAO
 				issue.setDescription(description);
 
 				
-				int departmentId = departmentDAO.findId(departmentName).getId();
-				department.setId(departmentId);
+				int id = departmentDAO.findId(name).getId();
+				department.setId(id);
 				issue.setDepartmentId(department);
 				issue.setPriority(priority);
 				issueDAO.save(issue);
-
-				int issueId =  issueDAO.findIssueId(userId, subject, description).getId();
-
-				issue.setId(issueId);
-				solution.setIssueId(issue);
-
-				role.setId(2);
-
-				int employeeId = employeeDAO.findEmployeeId(departmentId, role.getId()).getId();
-				employee.setId(employeeId);
-
-				solution.setEmployeeId(employee);
-				solutionDAO.save(solution);
+				
 			}
 
 		} catch (PersistenceException e) 
@@ -112,7 +124,7 @@ public class CreatingTicketDAO
 
 	
 												/*Ticket Updation*/
-	public void updatingTicket(String name,String emailId, String password, int issueId, String updateDescription)throws PersistenceException 
+	public void updatingTicket(String emailId, String password, int issueId, String updateDescription)throws PersistenceException 
 	{
 		
 		try {
@@ -149,7 +161,7 @@ public class CreatingTicketDAO
 	
 	
 												/*Ticket Closing*/
-	public void updateTicketClose( String name,String emailId, String password, int issueId) throws PersistenceException 
+	public void updateTicketClose( String emailId, String password, int issueId) throws PersistenceException 
 	{
 		try 
 		{
@@ -173,7 +185,7 @@ public class CreatingTicketDAO
 
 	
 											/*Maintaining User Records*/
-	public void findUserRecords(String emailId, String password) throws PersistenceException 
+	public List<Issue> findUserRecords(String emailId, String password) throws PersistenceException 
 	{
 		
 		UserLoginDAO userLoginDAO = new UserLoginDAO();
@@ -182,25 +194,20 @@ public class CreatingTicketDAO
 		try {
 			if (userLoginDAO.userLogin(emailId, password)) 
 			{
-				
 				int userId = userDAO.findUserId(emailId).getId();
 				user.setId(userId);
 				issueDAO.findUserRecords(user.getId());
 
 				List<Issue> list = issueDAO.findUserRecords(userId);
-				Iterator<Issue> i = list.iterator();
-				while (i.hasNext()) 
-				{
-					Issue issues = (Issue) i.next();
-					System.out.println(issues.getId() + "\t" + issues.getUserId().getId() + "\t" + issues.getSubject()
-							+ "\t" + issues.getDescription() + "\t" + issues.getStatus());
-				}
+
+				return list;
 			}
+
 		} catch (PersistenceException e) 
 		{
 			throw new PersistenceException("Login Error Occured", e);
 		}
-
+return null;
 	}
 	
 	
@@ -208,10 +215,9 @@ public class CreatingTicketDAO
 									/*Assigning Employee*/
 	public void assigningEmployee(String emailId, String password, int issueId, int employeeId)throws PersistenceException 
 	{
-		UserLoginDAO userLoginDAO = new UserLoginDAO();
 		try 
 		{
-			if (userLoginDAO.employeeLogin(emailId, password)) 
+			if (employeeLoginDAO.employeeLogin(emailId, password)) 
 			{
 				employee.setEmailId(emailId);
 				employee.setPassword(password);
@@ -228,7 +234,7 @@ public class CreatingTicketDAO
 					employee.setId(employeeId);
 					solution.setEmployeeId(employee);
 
-					solutionDAO.updateEmployeeId(solution);
+//					solutionDAO.updateEmployeeId(solution);
 
 					issueDAO.updateStatus(issue);       	/*Status will be in resolved state*/
 				} else 
@@ -246,36 +252,38 @@ public class CreatingTicketDAO
 	
 	
 										/*Giving Solution for User*/
-	public void ticketSolution(String emailId, String password, int issueId, String ticketSolution)throws PersistenceException {
-		UserLoginDAO userLoginDAO = new UserLoginDAO();
+	public void ticketSolution(String emailId, String password, int issueId, String ticketSolution)throws PersistenceException 
+	{
+		EmployeeLoginDAO employeeLoginDAO = new EmployeeLoginDAO();
 		try 
 		{
-			if (userLoginDAO.employeeLogin(emailId, password)) 
+			if (employeeLoginDAO.employeeLogin(emailId, password)) 
 			{
 				employee.setEmailId(emailId);
 				employee.setPassword(password);
 
+//			if(employeeDAO.findOne(emailId, password).getId()==solutionDAO.findEmployeeId(issueId).getEmployeeId().getId()){
 
-				if(employeeDAO.findOne(emailId, password).getId()==solutionDAO.findEmployeeId(issueId).getEmployeeId().getId()){
-				
 				issue.setId(issueId);
 				solution.setIssueId(issue);
 				solution.setSolutionDescription(ticketSolution);
 
 				solutionDAO.updateSolution(solution);
 
-				issueDAO.updateSolutionStatus(issue);
-				}
-				else
-				{
-					System.out.println("You are not assigned to this solution of issue");
-				}
+			issueDAO.updateSolutionStatus(issue);
+			System.out.println("hai");
+
 			}
-		} catch (PersistenceException e) 
+			else
+			{
+				System.out.println("You are not assigned to this solution of issue");
+			}
+		
+		}
+		catch (PersistenceException e) 
 		{
 			throw new PersistenceException("Login Failed due to invalid DATA", e);
 		}
-
 	}
 	
 	
@@ -283,10 +291,10 @@ public class CreatingTicketDAO
 											/*Ticket Deletion*/
 	public void deleteTickets(String emailId, String password, int issueId) throws PersistenceException 
 	{
-		UserLoginDAO userLoginDAO = new UserLoginDAO();
+		EmployeeLoginDAO employeeLoginDAO = new EmployeeLoginDAO();
 		try 
 		{
-			if (userLoginDAO.employeeLogin(emailId, password)) 
+			if (employeeLoginDAO.employeeLogin(emailId, password)) 
 			{
 				employee.setEmailId(emailId);
 				employee.setPassword(password);
@@ -317,38 +325,29 @@ public class CreatingTicketDAO
 
 	
 									/*Finding Employee's Ticket*/
-	public void findEmployeeTickets(String emailId, String password) throws PersistenceException
+	public List<Issue> findEmployeeTickets(String emailId, String password) throws PersistenceException
 	{
-		UserLoginDAO userLoginDAO = new UserLoginDAO();
+		List<Issue> list = null;
 		try 
 		{
-			if (userLoginDAO.employeeLogin(emailId, password)) 
-			{
+		       employeeLoginDAO.employeeLogin(emailId, password);
+			
+				
 				
 				employee.setEmailId(emailId);
 				employee.setPassword(password);
 				int employeeId=employeeDAO.findOne(emailId, password).getId();
+				list=issueDAO.findEmployeeTickets(employeeId);
 				
-				issueDAO.findEmployeeTickets(employeeId);
-				List<Issue> list = issueDAO.findEmployeeTickets(employeeId);
-				Iterator<Issue> i = list.iterator();
-				while (i.hasNext()) {
-					Issue issues = (Issue) i.next();
-					System.out.println(issues.getId()+ "\t" +issues.getSubject() + "\t"
-							+ issues.getDescription() +"\t"+issues.getStatus());
-				}
-				
-			}
-		
-	}catch (PersistenceException e) 
+			
+		}
+			catch (PersistenceException e) 
 		{
 			throw new PersistenceException("Login Failed", e);
 		}
+		return list;
 		
+	}
 }
 
-	
-	
-	
-	
-}
+
